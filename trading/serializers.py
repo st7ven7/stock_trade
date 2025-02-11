@@ -4,19 +4,26 @@ from . import models
 from .models import UserProfile
 
 class UserCreateSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
     user_type = serializers.ChoiceField(choices=UserProfile.User_Types)
 
     class Meta:
         model = User
-        # fields = ['username', 'password', 'user_type']
-        fields = '__all__'
+        exclude = ['last_login', 'id', 'groups', 'user_permissions']
         extra_kwargs = {'password':{'write_only': True}}
 
-        def post(self, validate_data):
-            user_type = validate_data.pop('user_type')
-            user = User.objects.create_user(**validate_data)
-            UserProfile.objects.create(user = user, user_type= user_type)
-            return user
+    def create(self, validate_data):
+        user_name = self.initial_data.get('username')
+        password = self.initial_data.get('password')
+        user_type = self.initial_data.get('user_type')
+
+        user = User.objects.create_user(username=user_name, password=password)
+        user_profile = UserProfile(user = user, user_type= user_type)
+
+        return user_profile
+    
+    def get_username(self, obj):
+        return obj.user.username
 
 class UserProfileSerializers(serializers.ModelSerializer):
     class Meta:
