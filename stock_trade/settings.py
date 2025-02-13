@@ -1,3 +1,4 @@
+from datetime import timedelta
 """
 Django settings for stock_trade project.
 
@@ -127,3 +128,19 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+# JWT Settings (Optional - Customize Expiry)
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Short-lived access token
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Longer refresh token
+    'ROTATE_REFRESH_TOKENS': True,  # Rotate refresh token on use
+    'BLACKLIST_AFTER_ROTATION': True,  # Blacklist old refresh token
+    'AUTH_HEADER_TYPES': ('Bearer',),  # Accept Bearer tokens in headers
+}
