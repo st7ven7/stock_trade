@@ -8,7 +8,7 @@ from .serializers import UserCreateSerializer, UserProfileSerializers, CompanySe
 
 class UserCreateView(APIView):
     def get(self, request, format=None):
-        # This could return a message or an empty serializer as an example.
+        
         return Response({"message": "Please send a POST request with your registration details."}, status=status.HTTP_200_OK)
 
     def post(self, request, format=None):
