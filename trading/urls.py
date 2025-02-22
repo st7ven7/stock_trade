@@ -14,5 +14,5 @@ urlpatterns = [
     path('transactions/', TransactionListView.as_view(), name='transaction-list'),
     path('transactions/create/', TransactionCreateview.as_view(), name='transaction-create'),
     path('api/token', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]

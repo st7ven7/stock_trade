@@ -2,7 +2,8 @@ from rest_framework import generics, permissions
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from rest_framework.views import APIView 
-from rest_framework.views import status 
+from rest_framework.views import status
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import UserProfile, Company, Share, Transaction 
 from .serializers import UserCreateSerializer, UserProfileSerializers, CompanySerializers, ShareSerializers, TransactionSerializers
 
@@ -15,6 +16,10 @@ class UserCreateView(APIView):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            user = User.objects.get(username=serializer.data.get('username'))
+            tokens = RefreshToken.for_user(user)
+
+            print(tokens)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
